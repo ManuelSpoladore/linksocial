@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Social Links - Agenzia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF0000, #FF1A1A, #FF3333);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1.1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #FFD700;
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 20px rgba(255,0,0,0.4);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .client-card {
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .client-card:hover::before {
+            left: 100%;
+        }
+
+        .client-card:hover {
+            background: rgba(255,255,255,0.95);
+            border-color: #FF0000;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255,0,0,0.3);
+        }
+
+        .client-card:hover .client-name {
+            color: #FF0000;
+        }
+
+        .client-card:hover .social-links a {
+            color: #FF0000;
+            border-color: #FF0000;
+        }
+
+        .client-card:hover .social-links a:hover {
+            background: #FF0000;
+            color: white;
+        }
+
+        .client-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: black;
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(0,0,0,0.5);
+            border-radius: 50%;
+            color: black;
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: #FF0000;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .social-links a:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.1);
+            border-color: #FF0000;
+        }
+
+        .client-card:not(:hover) .social-links a:hover {
+            background: #FF0000;
+            color: white;
+        }
+
+        .no-results {
+            text-align: center;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 50px;
+            display: none;
+        }
+
+        .stats {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats h3 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .clients-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .client-card {
+                padding: 20px;
+            }
+            
+            .social-links a {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-share-alt"></i> Link Social</h1>
+            
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="Cerca un cliente...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+
+        <div class="clients-grid" id="clientsGrid">
+            <!-- MAXì -->
+            <div class="client-card fade-in" data-client="maxi">
+                <h2 class="client-name">MAXì</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/maxisupermercati" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/supermercatiMaxi/" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/maxisupermercati/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@maxisupermercati?lang=it-IT" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TOGNANA -->
+            <div class="client-card fade-in" data-client="tognana">
+                <h2 class="client-name">TOGNANA</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/tognana/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/tognanaporcellane" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/tognana-porcellane-s.p.a./" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@tognanaporcellane?lang=it-IT" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PONTE1948 -->
+            <div class="client-card fade-in" data-client="ponte1948">
+                <h2 class="client-name">PONTE1948</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/ponte_1948/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/ponte1948/" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/viticoltori-ponte/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.tiktok.com/@ponte1948?lang=it-IT" target="_blank" title="TikTok">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- AZZURRA -->
+            <div class="client-card fade-in" data-client="azzurra">
+                <h2 class="client-name">AZZURRA</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/azzurrabagni/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/AzzurraArredobagno/" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/azzurrabagni/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- BAXAR -->
+            <div class="client-card fade-in" data-client="baxar">
+                <h2 class="client-name">BAXAR</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/baxarbagni/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/BAXARbagni/" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/baxarbagni/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CASEIFICIO TONON -->
+            <div class="client-card fade-in" data-client="caseificio tonon">
+                <h2 class="client-name">CASEIFICIO TONON</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/caseificio_tonon/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/CaseificioTonon/" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/caseificio-tonon/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LINEAQUATTRO -->
+            <div class="client-card fade-in" data-client="lineaquattro">
+                <h2 class="client-name">LINEAQUATTRO</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/lineaquattrocucine/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/LQcucine" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/lineaquattro/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PALAZZETTI ITA -->
+            <div class="client-card fade-in" data-client="palazzetti ita">
+                <h2 class="client-name">PALAZZETTI ITA</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/palazzettigroup/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/PalazzettiGroup/" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gruppo-palazzetti/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- PALAZZETTI FRANCIA -->
+            <div class="client-card fade-in" data-client="palazzetti francia">
+                <h2 class="client-name">PALAZZETTI FRANCIA</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/palazzettifr/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/palazzettifr" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gruppo-palazzetti/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ZECCHINON -->
+            <div class="client-card fade-in" data-client="zecchinon">
+                <h2 class="client-name">ZECCHINON</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/zecchinoncucine_official/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/Zecchinon" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/zecchinon-cucine-s-r-l/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- COLOS -->
+            <div class="client-card fade-in" data-client="colos">
+                <h2 class="client-name">COLOS</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/colos_official/" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/profile.php?id=100026666271488&ref=page_internal#" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/colosofficial/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CERANTOLA -->
+            <div class="client-card fade-in" data-client="cerantola">
+                <h2 class="client-name">CERANTOLA</h2>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/company/cerantola-s-p-a/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- CRICKET -->
+            <div class="client-card fade-in" data-client="cricket">
+                <h2 class="client-name">CRICKET</h2>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/cricket_adv" target="_blank" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com/cricketadv" target="_blank" title="Facebook">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/company/cricketadv/?viewAsMember=true" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ZEMIS -->
+            <div class="client-card fade-in" data-client="zemis">
+                <h2 class="client-name">ZEMIS</h2>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/company/zemis-srl/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-results" id="noResults">
+            <i class="fas fa-search"></i>
+            <p>Nessun cliente trovato con questo nome</p>
+        </div>
+
+        
+    </div>
+
+    <script>
+        // Calcola i link totali
+        const totalLinks = document.querySelectorAll('.social-links a').length;
+        document.getElementById('totalLinks').textContent = totalLinks;
+
+        // Funzionalità di ricerca
+        const searchInput = document.getElementById('searchInput');
+        const clientCards = document.querySelectorAll('.client-card');
+        const noResults = document.getElementById('noResults');
+        const clientsGrid = document.getElementById('clientsGrid');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            let visibleCards = 0;
+
+            clientCards.forEach(card => {
+                const clientName = card.getAttribute('data-client');
+                if (clientName.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.classList.add('fade-in');
+                    visibleCards++;
+                } else {
+                    card.style.display = 'none';
+                    card.classList.remove('fade-in');
+                }
+            });
+
+            if (visibleCards === 0) {
+                noResults.style.display = 'block';
+                clientsGrid.style.display = 'none';
+            } else {
+                noResults.style.display = 'none';
+                clientsGrid.style.display = 'grid';
+            }
+        });
+
+        // Animazione di entrata per le card
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        clientCards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // Effetto particelle sul background (opzionale)
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                width: 4px;
+                height: 4px;
+                background: rgba(255,255,255,0.1);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: -1;
+                left: ${Math.random() * 100}vw;
+                top: 100vh;
+                animation: float 6s linear infinite;
+            `;
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 6000);
+        }
+
+        // Crea particelle ogni 2 secondi
+        setInterval(createParticle, 2000);
+
+        // CSS per l'animazione delle particelle
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0% {
+                    transform: translateY(0) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
